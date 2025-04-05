@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Laucher {
+  id_laucher        Int           @id @default(autoincrement())
+  description       String
+  value             Decimal       @db.Decimal(10, 2)
+  launch_date       DateTime
+  status            String        @db.VarChar(20)
+  created_at        DateTime      @default(now())
+  category_id       Int
+  payment_method_id Int
+  category          Category      @relation(fields: [category_id], references: [id_category])
+  paymentMethod     PaymentMethod @relation(fields: [payment_method_id], references: [id_payment_method])
+}
+
+model Category {
+  id_category Int       @id @default(autoincrement())
+  description String
+  launchers   Laucher[]
+}
+
+model PaymentMethod {
+  id_payment_method Int       @id @default(autoincrement())
+  description       String
+  launchers         Laucher[]
+}
